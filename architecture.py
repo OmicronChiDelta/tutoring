@@ -1,7 +1,5 @@
 #basic python file to architect the webscraping component in selenium
 
-
-
 #imports
 import os
 from selenium import webdriver
@@ -19,7 +17,7 @@ import datetime
 
 #%%
 pull = True
-load_dir = "c:\\users\\alex white\\desktop\\tutorful\\extraction"
+load_dir = "c:\\users\\alex white\\desktop\\tutorful\\tutoring\\extraction"
 path_payload = os.path.join(load_dir, "prices.csv")
 string_now = datetime.datetime.now().strftime("%Y%d%m")
 
@@ -37,9 +35,9 @@ if pull:
     driver.get(url)
     time.sleep(5)
 
-    #Refresh to load more tutors - work on running until "stale reference" occurs
-    buffer = 2
-    for b in range(buffer):
+    #Refresh to load more tutors - stop when the "See more tutors" button can't be detected
+    results_maxed = False
+    while not results_maxed:
         try:
             #locate and click button: "See more tutors"
             search = driver.find_element_by_css_selector("button.btn:nth-child(3)")
@@ -48,6 +46,7 @@ if pull:
             time.sleep(3)
             print("button loaded and clicked")
         except:
+            results_maxed = True
             print("button expired")
 
     #Get all the HTML which has been loaded
